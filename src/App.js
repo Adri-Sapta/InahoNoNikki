@@ -2,12 +2,12 @@ import logo from './logo.svg';
 import './App.css';
 
 import React, { useState } from 'react';
-import Sidebar from './components/sidebar';
-import ProfileCard from './components/profilecard';
-import StreamStats from './components/streamstat';
-import ViewerTrendChart from './components/viewertrenchart';
-import MembershipStats from './components/membershipstat';
-import BahasaRecap from './components/bahasarecap';
+import Sidebar from './components/Sidebar';
+import ProfileCard from './components/ProfileCard';
+import StreamStats from './components/StreamStats';
+import ViewerTrendChart from './components/ViewerTrendChart';
+import MembershipStats from './components/MembershipStats';
+import BahasaRecap from './components/BahasaRecap';
 
 function App() {
   const [activeTab, setActiveTab] = useState('profile');
