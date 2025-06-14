@@ -27,6 +27,8 @@ function App() {
     { id: 1, message: 'Selamat datang, Inaho~san!', timestamp: new Date() },
     { id: 2, message: 'Jangan lupa untuk selalu bahagia!😊', timestamp: new Date() },
   ]);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const HEADER_HEIGHT_PX = 72;
   const SIDEBAR_WIDTH_PX = 256;
@@ -85,12 +87,15 @@ function App() {
       <div className={`transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         
         {/* Headbar dan Sidebar berada di luar main content untuk posisi fixed */}
-        <Headbar 
+        <Headbar
+          onMenuClick={toggleSidebar} 
           sidebarWidth={SIDEBAR_WIDTH_PX}
           onNotifikasiClick={toggleNotifikasiModal}
           notifikasiCount={notifikasis.length}
         />
         <Sidebar 
+          isOpen={isSidebarOpen}
+          onClose={toggleSidebar}
           activeTab={activeTab} 
           handleScrollTo={handleScrollTo}
           headerHeight={HEADER_HEIGHT_PX}
@@ -98,7 +103,7 @@ function App() {
         
         {/* Kontainer utama untuk konten yang bisa di-scroll */}
         <main 
-          className="relative"
+          className="relative md:ml-64"
           style={{ 
             marginLeft: `${SIDEBAR_WIDTH_PX}px`,
           }}
