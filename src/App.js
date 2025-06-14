@@ -77,6 +77,7 @@ function App() {
     }
   };
   
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const toggleNotifikasiModal = () => setIsNotifikasiModalOpen(!isNotifikasiModalOpen);
 
   return (
