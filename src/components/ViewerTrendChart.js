@@ -1,12 +1,143 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+// Impor komponen dan modul yang dibutuhkan dari Chart.js
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
-function ViewerTrendChart() {
+// Daftarkan modul-modul Chart.js
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+// --- LOGIKA PENGKATEGORIAN VIDEO ---
+const categorizeVideo = (title) => {
+  const lowerTitle = title.toLowerCase();
+  if (['minecraft', 'emily', 'shinkansen 0', 'dreadout', 'pamali'].some(term => lowerTitle.includes(term))) return 'Games';
+  if (['天皇賞', 'マイルc', 'オークス', 'ダービー', '安田記念'].some(term => lowerTitle.includes(term))) return 'Pacuan Kuda';
+  if (['karaoke', '歌配信'].some(term => lowerTitle.includes(term))) return 'Karaoke';
+  if (['belajar', 'study with me', '日本語', 'test-day'].some(term => lowerTitle.includes(term))) return 'Belajar / Study';
+  if (['indomie', 'durian', 'natto', 'nangka', 'idmievsjp', 'makan', '宝石たべる'].some(term => lowerTitle.includes(term))) return 'Makan-Makan';
+  if (['zatsudan', 'mengobrol', 'chill chat', '雑談', 'pacar jepang'].some(term => lowerTitle.includes(term))) return 'Zatsudan';
+  if (['buku catatan', 'berkencan'].some(term => lowerTitle.includes(term))) return 'Special';
+  return 'Lain-lain';
+};
+
+const excludedTitles = [
+  '【#新人vtuber 】落乃いなほ5月3日19時',
+  '【Vtuber】Perkenalan diri【Dari Jepang'
+];
+
+function ViewerTrendChart({ isActive, hasBeenViewed }) {
+  const [categorizedStreams, setCategorizedStreams] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeCategory, setActiveCategory] = useState('Games'); // Kategori default
+
+  useEffect(() => {
+    const fetchAndProcessData = async () => {
+      // ... (Logika fetch data sama seperti di StreamStats) ...
+      const apiKey = process.env.REACT_APP_YOUTUBE_API_KEY;
+      const channelId = 'UCxk-xk9E_GS8Z5qJ-iBYLyw';
+      if (!apiKey) {
+        setError("API Key tidak ditemukan!"); setLoading(false); return;
+      }
+      try {
+        setLoading(true);
+        const searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&order=date&maxResults=50&type=video`;
+        const searchResponse = await fetch(searchUrl);
+        const searchData = await searchResponse.json();
+        if (searchData.error) throw new Error(searchData.error.message);
+        
+        const videoIds = searchData.items.map(item => item.id.videoId).join(',');
+        const statsUrl = `https://www.googleapis.com/youtube/v3/videos?key=${apiKey}&id=${videoIds}&part=snippet,statistics`;
+        const statsResponse = await fetch(statsUrl);
+        const statsData = await statsResponse.json();
+        if (statsData.error) throw new Error(statsData.error.message);
+        
+        // --- PROSES DATA: Filter, Kategorikan, dan Kelompokkan ---
+        const debutDate = new Date('2024-05-01');
+        const processedData = statsData.items
+          .filter(video => {
+            const publishDate = new Date(video.snippet.publishedAt);
+            const isExcludedByTitle = excludedTitles.some(excluded => video.snippet.title.includes(excluded));
+            return publishDate >= debutDate && !isExcludedByTitle;
+          })
+          .reduce((acc, video) => {
+            const category = categorizeVideo(video.snippet.title);
+            if (!acc[category]) {
+              acc[category] = [];
+            }
+            acc[category].push(video);
+            return acc;
+          }, {});
+
+        // Urutkan video di setiap kategori berdasarkan view count
+        for (const category in processedData) {
+          processedData[category].sort((a, b) => b.statistics.viewCount - a.statistics.viewCount);
+        }
+        
+        setCategorizedStreams(processedData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAndProcessData();
+  }, []);
+
+  // Siapkan data untuk grafik berdasarkan kategori aktif
+  const topVideos = categorizedStreams[activeCategory]?.slice(0, 5) || []; // Ambil top 5, lalu balik agar yang tertinggi di atas
+  const chartData = {
+    labels: topVideos.map(v => v.snippet.title.substring(0, 30) + '...'), // Potong judul agar tidak terlalu panjang
+    datasets: [{
+      label: 'Jumlah Views',
+      data: topVideos.map(v => v.statistics.viewCount),
+      backgroundColor: '#ec4899', // Warna pink
+      borderColor: '#be185d',
+      borderWidth: 1,
+    }],
+  };
+  const chartOptions = {
+    indexAxis: 'y', // Membuat bar chart menjadi horizontal
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: { x: { ticks: { callback: value => value >= 1000 ? `${value / 1000}K` : value } } }
+  };
+
   return (
-    <div>
-      <h2>📈 Stream Stats</h2>
-      {/* konten lain */}
+    <div className={`transition-all duration-700 ease-in-out ${hasBeenViewed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} ${isActive ? 'animate-pulse-active' : ''}`}>
+      <div className="bg-white p-6 rounded-xl shadow-lg border border-pink-100 space-y-6">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800 mb-3">Pilih Kategori:</h3>
+          <div className="flex flex-wrap gap-2">
+            {Object.keys(categorizedStreams).map(category => (
+              <button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
+                  activeCategory === category
+                    ? 'bg-pink-600 text-white shadow-md'
+                    : 'bg-gray-200 text-gray-700 hover:bg-pink-100'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {loading && <p className="text-center text-gray-500">Menganalisis tren...</p>}
+        {error && <p className="text-center text-red-500">Error: {error}</p>}
+        {!loading && !error && topVideos.length > 0 && (
+          <div className="p-4 border rounded-lg bg-pink-50/50">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">Top 5 Video Terpopuler Kategori: {activeCategory}</h3>
+            <Bar options={chartOptions} data={chartData} />
+          </div>
+        )}
+         {!loading && !error && topVideos.length === 0 && (
+          <p className="text-center text-gray-500 py-8">Tidak ada data video untuk kategori ini.</p>
+        )}
+      </div>
     </div>
   );
 }
 
-export default ViewerTrendChart; 
+export default ViewerTrendChart;

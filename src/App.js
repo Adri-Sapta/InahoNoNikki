@@ -8,7 +8,7 @@ import Home from './components/Home';
 import ProfileCard from './components/ProfileCard';
 import StreamStats from './components/StreamStats';
 import ViewerTrendChart from './components/ViewerTrendChart';
-import MembershipStats from './components/MembershipStats';
+import GrowthStats from './components/GrowthStats';
 import BahasaRecap from './components/BahasaRecap';
 
 function App() {
@@ -28,13 +28,13 @@ function App() {
   const profileRef = useRef(null);
   const streamRef = useRef(null);
   const trendRef = useRef(null);
-  const membershipRef = useRef(null);
+  const growthRef = useRef(null);
   const bahasaRef = useRef(null);
 
   useEffect(() => {
     if (isLoading) return;
 
-    const sections = [homeRef, profileRef, streamRef, trendRef, membershipRef, bahasaRef];
+    const sections = [homeRef, profileRef, streamRef, trendRef, growthRef, bahasaRef];
     const options = {
       root: null,
       rootMargin: '-40% 0px -60% 0px',
@@ -69,7 +69,7 @@ function App() {
     profile: profileRef,
     stream: streamRef,
     trend: trendRef,
-    membership: membershipRef,
+    growth: growthRef,
     bahasa: bahasaRef,
   };
 
@@ -104,8 +104,8 @@ function App() {
             <ViewerTrendChart isActive={activeTab === 'trend'} hasBeenViewed={viewedSections.trend} />
           </section>
 
-          <section id="membership" ref={membershipRef} className="section-container">
-            <MembershipStats isActive={activeTab === 'membership'} hasBeenViewed={viewedSections.membership} />
+          <section id="growth" ref={growthRef} className="section-container">
+            <GrowthStats isActive={activeTab === 'growth'} hasBeenViewed={viewedSections.growth} />
           </section>
 
           <section id="bahasa" ref={bahasaRef} className="section-container">
