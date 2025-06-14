@@ -102,7 +102,9 @@ function App() {
   return (
     <>
       <Preloader isLoading={isLoading} />
-
+      
+      {!isLoading && (
+      <>
       {/* Headbar di paling atas, fixed */}
       <Headbar
         headerHeight={HEADER_HEIGHT}
@@ -120,6 +122,8 @@ function App() {
         headerHeight={HEADER_HEIGHT}
         sidebarWidth={SIDEBAR_WIDTH}
       />
+       </>
+      )}
 
       {/* Kontainer utama untuk konten yang bisa di-scroll */}
       {/* Div ini akan memiliki margin-left untuk mengimbangi sidebar,
