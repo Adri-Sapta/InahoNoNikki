@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+/* Animasi untuk fade-in/out yang berulang-ulang */
+@keyframes active-section-pulse {
+  0%, 100% {
+    /* Sedikit redup di awal dan akhir */
+    opacity: 0.9;
+  }
+  50% {
+    /* Opacity penuh di tengah animasi */
+    opacity: 1;
+  }
+}
+
+/* Kelas utilitas untuk menerapkan animasi */
+.animate-pulse-active {
+  animation: active-section-pulse 2.5s ease-in-out infinite;
+}
+
+/* Memberi jarak antar section */
+.section-container {
+  /* Ubah ini! Tambahkan padding-top untuk memberi jarak dari section di atasnya.
+    'pt-24' di Tailwind setara dengan 6rem atau 96px.
+  */
+  padding-top: 4rem; 
+}
+
