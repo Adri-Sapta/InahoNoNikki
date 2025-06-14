@@ -5,7 +5,7 @@ import Typewriter from 'typewriter-effect';
 // Impor gambar Anda
 import img1 from '../assets/carousel/carouselInaho01.png';
 import img2 from '../assets/carousel/carouselInaho02.png';
-import img3 from '../assets/carousel/carouselInaho01.png'; // Menggunakan gambar pertama lagi, sesuai kode Anda
+import img3 from '../assets/carousel/carouselInaho03.png'; // Menggunakan gambar pertama lagi, sesuai kode Anda
 
 // Impor CSS wajib untuk carousel
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 

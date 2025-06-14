@@ -24,15 +24,27 @@ const excludedTitles = [
   '【Vtuber】Perkenalan diri【Dari Jepang'
 ];
 
-function ViewerTrendChart({ isActive, hasBeenViewed }) {
+const categoryOrder = [
+    'Games',
+    'Belajar / Study',
+    'Karaoke',
+    'Zatsudan',
+    'Makan-Makan',
+    'Pacuan Kuda',
+    'Special',
+    'Lain-lain'
+];
+
+function ViewerTrendChart({ isActive, hasBeenViewed }) { 
   const [categorizedStreams, setCategorizedStreams] = useState({});
+  const [activeCategory, setActiveCategory] = useState('Games');
+  // Kembalikan state loading dan error ke komponen ini
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('Games'); // Kategori default
-
+  
+  // Mengembalikan logika fetch data ke dalam komponen ini
   useEffect(() => {
     const fetchAndProcessData = async () => {
-      // ... (Logika fetch data sama seperti di StreamStats) ...
       const apiKey = process.env.REACT_APP_YOUTUBE_API_KEY;
       const channelId = 'UCxk-xk9E_GS8Z5qJ-iBYLyw';
       if (!apiKey) {
@@ -51,7 +63,6 @@ function ViewerTrendChart({ isActive, hasBeenViewed }) {
         const statsData = await statsResponse.json();
         if (statsData.error) throw new Error(statsData.error.message);
         
-        // --- PROSES DATA: Filter, Kategorikan, dan Kelompokkan ---
         const debutDate = new Date('2024-05-01');
         const processedData = statsData.items
           .filter(video => {
@@ -68,9 +79,8 @@ function ViewerTrendChart({ isActive, hasBeenViewed }) {
             return acc;
           }, {});
 
-        // Urutkan video di setiap kategori berdasarkan view count
         for (const category in processedData) {
-          processedData[category].sort((a, b) => b.statistics.viewCount - a.statistics.viewCount);
+          processedData[category].sort((a, b) => Number(b.statistics.viewCount) - Number(a.statistics.viewCount));
         }
         
         setCategorizedStreams(processedData);
@@ -83,24 +93,18 @@ function ViewerTrendChart({ isActive, hasBeenViewed }) {
     fetchAndProcessData();
   }, []);
 
-  // Siapkan data untuk grafik berdasarkan kategori aktif
-  const topVideos = categorizedStreams[activeCategory]?.slice(0, 5) || []; // Ambil top 5, lalu balik agar yang tertinggi di atas
+  const topVideos = categorizedStreams[activeCategory]?.slice(0, 5) || [];
   const chartData = {
-    labels: topVideos.map(v => v.snippet.title.substring(0, 30) + '...'), // Potong judul agar tidak terlalu panjang
+    labels: topVideos.map(v => v.snippet.title.substring(0, 30) + '...'),
     datasets: [{
       label: 'Jumlah Views',
       data: topVideos.map(v => v.statistics.viewCount),
-      backgroundColor: '#ec4899', // Warna pink
+      backgroundColor: '#ec4899',
       borderColor: '#be185d',
       borderWidth: 1,
     }],
   };
-  const chartOptions = {
-    indexAxis: 'y', // Membuat bar chart menjadi horizontal
-    responsive: true,
-    plugins: { legend: { display: false } },
-    scales: { x: { ticks: { callback: value => value >= 1000 ? `${value / 1000}K` : value } } }
-  };
+  const chartOptions = { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { callback: value => value >= 1000 ? `${value / 1000}K` : value } } } };
 
   return (
     <div className={`transition-all duration-700 ease-in-out ${hasBeenViewed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} ${isActive ? 'animate-pulse-active' : ''}`}>
@@ -108,18 +112,20 @@ function ViewerTrendChart({ isActive, hasBeenViewed }) {
         <div>
           <h3 className="text-lg font-semibold text-gray-800 mb-3">Pilih Kategori:</h3>
           <div className="flex flex-wrap gap-2">
-            {Object.keys(categorizedStreams).map(category => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
-                  activeCategory === category
-                    ? 'bg-pink-600 text-white shadow-md'
-                    : 'bg-gray-200 text-gray-700 hover:bg-pink-100'
-                }`}
-              >
-                {category}
-              </button>
+            {categoryOrder
+              .filter(category => categorizedStreams[category])
+              .map(category => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
+                    activeCategory === category
+                      ? 'bg-pink-600 text-white shadow-md'
+                      : 'bg-gray-200 text-gray-700 hover:bg-pink-100'
+                  }`}
+                >
+                  {category}
+                </button>
             ))}
           </div>
         </div>
