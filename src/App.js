@@ -10,7 +10,7 @@ import Home from './components/Home';
 import ProfileCard from './components/ProfileCard';
 import StreamStats from './components/StreamStats';
 import ViewerTrendChart from './components/ViewerTrendChart';
-import MembershipStats from './components/MembershipStats';
+import GrowthStats from './components/GrowthStats';
 import BahasaRecap from './components/BahasaRecap';
 import NotifikasiModal from './components/NotifikasiModal';
 
@@ -28,6 +28,10 @@ function App() {
   // Pastikan nilai ini SAMA dengan yang di komponen Headbar.js dan Sidebar.js
   const HEADER_HEIGHT = 70; // dalam px
   const SIDEBAR_WIDTH = 256; // dalam px, karena w-64 = 16rem = 256px
+  
+  // 1. State baru untuk melacak section yang sudah pernah dilihat.
+  //    'home' di-set true karena itu yang pertama muncul.
+  const [viewedSections, setViewedSections] = useState({ home: true });
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2500);
@@ -38,45 +42,27 @@ function App() {
   const profileRef = useRef(null);
   const streamRef = useRef(null);
   const trendRef = useRef(null);
-  const membershipRef = useRef(null);
+  const growthRef = useRef(null);
   const bahasaRef = useRef(null);
 
-  const sectionRefs = {
-    home: homeRef,
-    profile: profileRef,
-    stream: streamRef,
-    trend: trendRef,
-    membership: membershipRef,
-    bahasa: bahasaRef,
-  };
-
-  // Fungsi untuk smooth scroll dengan offset headbar
-  const handleScrollTo = (key) => {
-    const targetRef = sectionRefs[key];
-    if (targetRef && targetRef.current) {
-      const yOffset = -HEADER_HEIGHT; // Offset negatif dari tinggi headbar
-      const y = targetRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  };
-
-  // Logic untuk mendeteksi section aktif saat scroll
   useEffect(() => {
-    const sections = [homeRef, profileRef, streamRef, trendRef, membershipRef, bahasaRef];
+    if (isLoading) return;
+
+    const sections = [homeRef, profileRef, streamRef, trendRef, growthRef, bahasaRef];
     const options = {
       root: null,
-      // rootMargin disesuaikan untuk Fixed Header.
-      // Top margin harus sama dengan tinggi header (atau sedikit lebih besar)
-      // agar IntersectionObserver memicu ketika bagian atas section terlihat di bawah header.
-      // Contoh: `-${HEADER_HEIGHT}px 0px 0px 0px` berarti observer dimulai `HEADER_HEIGHT`px di bawah bagian atas viewport.
-      rootMargin: `-${HEADER_HEIGHT}px 0px -50% 0px`, // Sesuaikan 50% jika perlu.
-      threshold: 0, // Pemicu segera setelah elemen masuk/keluar
+      rootMargin: '-40% 0px -60% 0px',
+      threshold: 0,
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          setActiveTab(entry.target.id);
+          const sectionId = entry.target.id;
+          // Set section yang aktif untuk highlight sidebar
+          setActiveTab(sectionId);
+          // 2. Tandai section ini sebagai sudah pernah dilihat
+          setViewedSections(prev => ({ ...prev, [sectionId]: true }));
         }
       });
     }, options);
@@ -85,13 +71,33 @@ function App() {
       if (section.current) observer.observe(section.current);
     });
 
-    return () => observer.disconnect();
-  }, [isLoading]); // Kita jalankan observer setelah loading selesai
+    return () => {
+      sections.forEach(section => {
+        if (section.current) observer.unobserve(section.current);
+      });
+    };
+  }, [isLoading]);
 
     // Fungsi untuk membuka/menutup modal notifikasi
   const toggleNotifikasiModal = () => {
     setIsNotifikasiModalOpen(!isNotifikasiModalOpen);
   };
+  const sectionRefs = {
+    home: homeRef,
+    profile: profileRef,
+    stream: streamRef,
+    trend: trendRef,
+    growth: growthRef,
+    bahasa: bahasaRef,
+  };
+
+  const handleScrollTo = (key) => {
+    sectionRefs[key]?.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }
+  
 
   return (
     <>
@@ -130,39 +136,30 @@ function App() {
           // main di dalamnya akan menangani scroll
         }}
       >
-        <main className="p-6 h-full"> {/* Hapus `flex-1` dan `overflow-y-auto` di sini. */}
-          {/* Konten akan di-scroll oleh `body` atau root div jika tidak ada overflow di `main` */}
-          {/* Untuk mengaktifkan scrolling di `main`, tambahkan `overflow-y-auto` ke sini */}
-          {/* Atau, biarkan scrolling ditangani oleh root div jika semua konten di sini */}
-
-          {/* Render SEMUA komponen secara berurutan */}
-          <section id="home" ref={homeRef} className="pb-16">
-            <Home />
+        <main className="flex-1 p-6 overflow-y-auto">
+          {/* 3. Kirim DUA prop: 'isActive' dan 'hasBeenViewed' */}
+          <section id="home" ref={homeRef}>
+            <Home isActive={activeTab === 'home'} hasBeenViewed={viewedSections.home} />
           </section>
 
           <section id="profile" ref={profileRef} className="section-container">
-            <h2 className="section-title">👤 Profile</h2>
-            <ProfileCard />
+            <ProfileCard isActive={activeTab === 'profile'} hasBeenViewed={viewedSections.profile} />
           </section>
 
           <section id="stream" ref={streamRef} className="section-container">
-            <h2 className="section-title">📈 Stream Stats</h2>
-            <StreamStats />
+            <StreamStats isActive={activeTab === 'stream'} hasBeenViewed={viewedSections.stream} />
           </section>
 
           <section id="trend" ref={trendRef} className="section-container">
-            <h2 className="section-title">📊 Viewer Trends</h2>
-            <ViewerTrendChart />
+            <ViewerTrendChart isActive={activeTab === 'trend'} hasBeenViewed={viewedSections.trend} />
           </section>
 
-          <section id="membership" ref={membershipRef} className="section-container">
-            <h2 className="section-title">🧑‍🤝‍🧑 Membership</h2>
-            <MembershipStats />
+          <section id="growth" ref={growthRef} className="section-container">
+            <GrowthStats isActive={activeTab === 'growth'} hasBeenViewed={viewedSections.growth} />
           </section>
 
           <section id="bahasa" ref={bahasaRef} className="section-container">
-            <h2 className="section-title">🇮🇩 Bahasa Recap</h2>
-            <BahasaRecap />
+            <BahasaRecap isActive={activeTab === 'bahasa'} hasBeenViewed={viewedSections.bahasa} />
           </section>
         </main>
       </div>

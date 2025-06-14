@@ -12,7 +12,7 @@ function Sidebar({ activeTab, handleScrollTo }) {
     { key: 'profile', label: '👤 Profile' },
     { key: 'stream', label: '📈 Stream Stats' },
     { key: 'trend', label: '📊 Viewer Trends' },
-    { key: 'membership', label: '🧑‍🤝‍🧑 Membership' },
+    { key: 'growth', label: '🚀 Pencapaian' },
     { key: 'bahasa', label: '🇮🇩 Bahasa Recap' }
   ];
 
