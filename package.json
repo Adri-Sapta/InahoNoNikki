@@ -1,7 +1,7 @@
 {
   "name": "vtuber-dashboard",
   "version": "0.1.0",
-  "homepage": "https://github.com/Adri-Sapta/InahoNoNikki",
+  "homepage": "https://adri-sapta.github.io/InahoNoNikki/",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
