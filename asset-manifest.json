@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/Adri-Sapta/InahoNoNikki/static/css/main.4f3aa92f.css",
+    "main.js": "/Adri-Sapta/InahoNoNikki/static/js/main.2756f7e7.js",
+    "static/js/453.1d3494c7.chunk.js": "/Adri-Sapta/InahoNoNikki/static/js/453.1d3494c7.chunk.js",
+    "static/media/carouselInaho03.png": "/Adri-Sapta/InahoNoNikki/static/media/carouselInaho03.69c6c207bf6ed126c61d.png",
+    "static/media/carouselInaho01.png": "/Adri-Sapta/InahoNoNikki/static/media/carouselInaho01.b28a33a33254b1b81bcb.png",
+    "static/media/carouselInaho02.png": "/Adri-Sapta/InahoNoNikki/static/media/carouselInaho02.ee0f3828a189e5b984a6.png",
+    "static/media/inahoImg01.png": "/Adri-Sapta/InahoNoNikki/static/media/inahoImg01.62ce252abb0342ea3d6c.png",
+    "static/media/thumb01.png": "/Adri-Sapta/InahoNoNikki/static/media/thumb01.58f3cd61776d78055508.png",
+    "static/media/sertif01.jpeg": "/Adri-Sapta/InahoNoNikki/static/media/sertif01.ec935dc4f8debc8c5872.jpeg",
+    "static/media/rendang.jpg": "/Adri-Sapta/InahoNoNikki/static/media/rendang.88ef6ffd042b834f16f5.jpg",
+    "static/media/rajaampat.jpg": "/Adri-Sapta/InahoNoNikki/static/media/rajaampat.98cb84221de7635353a1.jpg",
+    "static/media/ubud.jpg": "/Adri-Sapta/InahoNoNikki/static/media/ubud.66826607368b3bd5ffce.jpg",
+    "static/media/satepadang.jpg": "/Adri-Sapta/InahoNoNikki/static/media/satepadang.4e4d13a89236d731c8fd.jpg",
+    "static/media/delman.jpg": "/Adri-Sapta/InahoNoNikki/static/media/delman.1c13ac016ae364b5ba35.jpg",
+    "static/media/inahoImgSide.png": "/Adri-Sapta/InahoNoNikki/static/media/inahoImgSide.8e92cbcac18be8c35df7.png",
+    "static/media/nasiGoreng.jpg": "/Adri-Sapta/InahoNoNikki/static/media/nasiGoreng.f6c5493c3466dec8fe84.jpg",
+    "static/media/wayang.jpg": "/Adri-Sapta/InahoNoNikki/static/media/wayang.1223f2560115491ad8ed.jpg",
+    "static/media/candiborobudur.jpg": "/Adri-Sapta/InahoNoNikki/static/media/candiborobudur.3014a94d9a4546941723.jpg",
+    "static/media/membatik.jpg": "/Adri-Sapta/InahoNoNikki/static/media/membatik.eb521a7d8758d84925d2.jpg",
+    "index.html": "/Adri-Sapta/InahoNoNikki/index.html",
+    "main.4f3aa92f.css.map": "/Adri-Sapta/InahoNoNikki/static/css/main.4f3aa92f.css.map",
+    "main.2756f7e7.js.map": "/Adri-Sapta/InahoNoNikki/static/js/main.2756f7e7.js.map",
+    "453.1d3494c7.chunk.js.map": "/Adri-Sapta/InahoNoNikki/static/js/453.1d3494c7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4f3aa92f.css",
+    "static/js/main.2756f7e7.js"
+  ]
+}
