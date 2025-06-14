@@ -1,9 +1,14 @@
+// src/components/sidebar.js
+
 import React from 'react';
 
 function Sidebar({ activeTab, handleScrollTo }) {
-  // Pastikan 'key' di sini sama persis dengan 'id' section di App.js
+  // PENTING: headerHeight ini HARUS SAMA dengan yang di Header.js dan App.js
+  const headerHeight = '70px'; 
+  const sidebarWidth = '256px'; // Set lebar sidebar agar konsisten dengan w-64 (16rem = 256px)
+
   const menuItems = [
-    { key: 'home', label: '🏠 Home' }, 
+    { key: 'home', label: '🏠 Home' },
     { key: 'profile', label: '👤 Profile' },
     { key: 'stream', label: '📈 Stream Stats' },
     { key: 'trend', label: '📊 Viewer Trends' },
@@ -12,14 +17,26 @@ function Sidebar({ activeTab, handleScrollTo }) {
   ];
 
   return (
-    // 2. Tambahkan kelas 'sticky top-0 h-screen' agar sidebar tetap di tempat
-    //    saat konten utama di-scroll.
-    <aside className="w-64 bg-white p-4 shadow-md sticky top-0 h-screen">
-      <nav className="space-y-2">
+    // Menggunakan 'fixed' agar sidebar tetap di tempat saat halaman di-scroll
+    // top-[...] untuk posisi di bawah header
+    // h-[calc(100vh-...)] untuk mengisi sisa tinggi layar
+    // w-64 sesuai lebar yang Anda inginkan
+    <aside
+      className={`bg-inahoRed px-4 shadow-md fixed left-0 z-40 overflow-y-auto`}
+      style={{
+        height: `calc(100vh + ${headerHeight})`,
+        width: sidebarWidth // Menggunakan style prop untuk lebar agar lebih eksplisit atau gunakan w-64
+      }}
+    >
+      {/* Mengembalikan judul penuh "Inaho" */}
+      <div className="text-xl py-4 font-bold mb-2 text-pink-700 h-[70px] flex items-center">
+        <span className="text-4xl font-bold uppercase">落乃いなほ</span> {/* Tambahan span dan kelas font */}
+      </div>
+
+      <nav className="space-y-2 pt-4">
         {menuItems.map(item => (
           <button
             key={item.key}
-            // 3. Ganti onClick untuk memanggil fungsi scroll
             onClick={() => handleScrollTo(item.key)}
             className={`block w-full text-left px-4 py-2 rounded transition-all duration-200 ${
               activeTab === item.key
