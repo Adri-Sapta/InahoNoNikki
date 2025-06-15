@@ -4,7 +4,6 @@ import profileImage from '../assets/inahoImg01.png';
 // 1. Terima dua prop: 'isActive' untuk pulse, 'hasBeenViewed' untuk reveal
 function ProfileCard({ isActive, hasBeenViewed }) {
   return (
-    // 2. Logika kelas CSS sekarang dipisah
     <div className={`
       bg-white p-6 rounded-xl shadow-lg border border-pink-100 
       transition-all duration-700 ease-in-out
@@ -13,14 +12,16 @@ function ProfileCard({ isActive, hasBeenViewed }) {
     `}>
       {/* Bagian Header Profil */}
       <div className="flex flex-col md:flex-row items-center">
+        {/* Ukuran gambar disesuaikan untuk mobile dan desktop */}
         <img 
           src={profileImage}
           alt="落乃いなほ Profile" 
-          className="w-32 h-32 rounded-full object-cover border-4 border-pink-200 shadow-lg mb-4 md:mb-0 md:mr-6 transition-transform duration-300 hover:scale-105"
+          className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-pink-200 shadow-lg mb-4 md:mb-0 md:mr-6 transition-transform duration-300 hover:scale-105"
         />
         <div className="text-center md:text-left">
-          <h2 className="text-3xl font-bold text-pink-800">落乃いなほ (Ochinai Inaho)</h2>
-          <p className="text-md text-gray-600">Ambisi: Menikah dengan raja minyak.</p>
+          {/* Ukuran judul utama dibuat responsif */}
+          <h2 className="text-2xl md:text-3xl font-bold text-pink-800">落乃いなほ (Ochinai Inaho)</h2>
+          <p className="text-sm md:text-base text-gray-600">Ambisi: Menikah dengan raja minyak.</p>
           <div className="mt-3 flex flex-wrap gap-2 justify-center md:justify-start">
             <span className="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">娯楽プロ (Goraku Pro)</span>
             <span className="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Pecinta Pacuan Kuda</span>
@@ -31,9 +32,10 @@ function ProfileCard({ isActive, hasBeenViewed }) {
 
       {/* Bagian Lore */}
       <div className="mt-8 border-t border-pink-100 pt-6">
-        <h3 className="text-xl font-semibold text-pink-700 mb-4">Lore Resmi</h3>
+        {/* Ukuran subjudul dibuat responsif */}
+        <h3 className="text-lg md:text-xl font-semibold text-pink-700 mb-4">Lore Resmi</h3>
         <div className="space-y-3 text-gray-700">
-          <blockquote className="border-l-4 border-pink-200 pl-4 italic">
+          <blockquote className="border-l-4 border-pink-200 pl-4 italic text-sm md:text-base">
            "Seorang wanita cantik berkimono dengan aura tenang. Namun sebenarnya orang gila yang pernah berhenti dari pekerjaannya karena terlalu mencintai pacuan kuda. Sedang belajar banyak bahasa dan memiliki ambisi untuk menikah dengan raja minyak di masa depan."
           </blockquote>
         </div>
@@ -41,7 +43,7 @@ function ProfileCard({ isActive, hasBeenViewed }) {
 
       {/* Bagian Kreator */}
       <div className="mt-8 border-t border-pink-100 pt-6">
-        <h3 className="text-xl font-semibold text-pink-700 mb-4">Kreator (Mama & Papa)</h3>
+        <h3 className="text-lg md:text-xl font-semibold text-pink-700 mb-4">Kreator (Mama & Papa)</h3>
         <div className="space-y-2 text-gray-700">
           <p>
             <span className="font-semibold">♡ Mama (Ilustrator):</span> 
@@ -60,7 +62,7 @@ function ProfileCard({ isActive, hasBeenViewed }) {
       
       {/* Bagian Tautan Resmi */}
       <div className="mt-8 border-t border-pink-100 pt-6">
-        <h3 className="text-xl font-semibold text-pink-700 mb-4">Tautan Resmi</h3>
+        <h3 className="text-lg md:text-xl font-semibold text-pink-700 mb-4">Tautan Resmi</h3>
         <div className="flex flex-wrap gap-3">
           <a href="https://www.youtube.com/@落乃いなほ" target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 transform hover:scale-110">
             YouTube

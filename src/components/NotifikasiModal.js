@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
 const NotifikasiModal = ({ isOpen, onClose, notifikasis }) => {
-  const modalRef = useRef(); // Digunakan jika ingin fokus pada modal saat dibuka
-
   // Efek untuk menutup modal saat tombol ESC ditekan
   useEffect(() => {
     const handleEscape = (event) => {
@@ -16,48 +14,54 @@ const NotifikasiModal = ({ isOpen, onClose, notifikasis }) => {
     return () => {
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [isOpen, onClose]); // Dependensi: hanya aktif jika isOpen berubah atau onClose berubah
+  }, [isOpen, onClose]);
 
   // Jika modal tidak terbuka, jangan render apa pun
   if (!isOpen) return null;
 
   return (
-    // Overlay (latar belakang gelap)
+    // PERUBAHAN 1: Menambahkan padding (p-4) pada overlay
+    // Ini memastikan modal tidak akan pernah menyentuh tepi layar HP.
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]" // z-index sangat tinggi agar selalu di atas
-      onClick={onClose} // Menutup modal saat mengklik di luar konten modal
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000] transition-opacity duration-300 p-4"
+      onClick={onClose}
     >
-      {/* Konten Modal */}
+      {/* Konten Modal dengan animasi muncul */}
       <div
-        className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md mx-4 md:mx-0"
-        onClick={(e) => e.stopPropagation()} // Mencegah penutupan saat mengklik di dalam konten modal
-        role="dialog" // Penting untuk aksesibilitas
-        aria-modal="true" // Penting untuk aksesibilitas
+        // PERUBAHAN 2: Menyesuaikan padding internal modal
+        className="bg-white p-4 md:p-6 rounded-xl shadow-xl w-full max-w-md transition-transform duration-300 transform scale-95 opacity-0 animate-fade-in-scale"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
         aria-labelledby="notifikasi-modal-title"
       >
-        <div className="flex justify-between items-center mb-4">
-          <h2 id="notifikasi-modal-title" className="text-2xl font-bold text-gray-800">
+        <div className="flex justify-between items-center mb-4 pb-4 border-b border-pink-100">
+          {/* PERUBAHAN 3: Menyesuaikan ukuran judul */}
+          <h2 id="notifikasi-modal-title" className="text-xl md:text-2xl font-bold text-pink-800">
             Notifikasi
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 focus:outline-none text-3xl font-light leading-none"
+            className="text-gray-400 hover:text-pink-600 focus:outline-none transition-colors rounded-full p-1"
             aria-label="Tutup notifikasi"
           >
-            &times; {/* Simbol 'x' untuk menutup */}
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
         {notifikasis.length === 0 ? (
           <p className="text-gray-600">Tidak ada notifikasi baru.</p>
         ) : (
-          <ul className="space-y-3 max-h-80 overflow-y-auto"> {/* Max height dan scroll jika notifikasi banyak */}
-            {notifikasis.map((notifikasi, index) => (
-              <li key={index} className="bg-gray-50 p-3 rounded-md border border-gray-200 text-gray-700 text-sm">
+          <ul className="space-y-3 max-h-80 overflow-y-auto pr-2">
+            {notifikasis.map((notifikasi) => (
+              // PERUBAHAN 4: Menyesuaikan padding list item
+              <li key={notifikasi.id} className="bg-pink-50/50 p-3 rounded-md border border-pink-100 text-gray-700 text-sm hover:bg-pink-100 transition-colors">
                 {notifikasi.message}
                 {notifikasi.timestamp && (
-                  <span className="block text-xs text-gray-500 mt-1">
-                    {new Date(notifikasi.timestamp).toLocaleString('id-ID')}
+                  <span className="block text-xs text-pink-700/80 mt-1">
+                    {new Date(notifikasi.timestamp).toLocaleString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 )}
               </li>

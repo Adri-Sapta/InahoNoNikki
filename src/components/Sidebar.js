@@ -2,31 +2,30 @@ import React from 'react';
 
 import profileImage from '../assets/inahoImgSide.png';
 
-function Sidebar({ isOpen, onClose, activeTab, handleScrollTo, headerHeight }) {
-  
-
+function Sidebar({ isOpen, onClose, activeTab, handleScrollTo }) {
   const menuItems = [
-    { key: 'home', label: '🏠 Home' },
+    { key: 'home', label: '🏠 Home' }, 
     { key: 'profile', label: '👤 Profile' },
     { key: 'stream', label: '📈 Stream Stats' },
     { key: 'trend', label: '📊 Viewer Trends' },
     { key: 'growth', label: '🚀 Pencapaian' },
-    { key: 'bahasa', label: '🇮🇩 Bahasa Recap' },
+    { key: 'bahasa', label: '�🇩 Bahasa Recap' },
     { key: 'exam', label: '📝 Ujian' },
-    { key: 'awards', label: '🏆 Penghargaan' },
     { key: 'recommendations', label: '❤️ Rekomendasi' },
+    { key: 'awards', label: '🏆 Penghargaan' },
   ];
 
+  // Fungsi ini akan menjalankan scroll DAN menutup sidebar (khusus mobile)
   const handleMenuClick = (key) => {
     handleScrollTo(key);
-    onClose(); // Tutup sidebar setelah menu di-klik
+    onClose(); // Memberi sinyal ke App.js untuk menutup sidebar
   };
 
   return (
     <>
       {/* Overlay gelap yang hanya muncul di mobile saat sidebar terbuka */}
       <div 
-        className={`fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       ></div>
 
@@ -35,12 +34,12 @@ function Sidebar({ isOpen, onClose, activeTab, handleScrollTo, headerHeight }) {
         className={`bg-white p-4 shadow-lg fixed left-0 top-0 z-50 flex flex-col h-screen w-64
                    transition-transform duration-300 ease-in-out
                    ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
-                   md:translate-x-0`} // Di layar besar (md), selalu terlihat
+                   md:translate-x-0`} // Di layar besar (md), sidebar akan selalu terlihat
       >
         <div className="flex flex-col items-center text-center pb-4 border-b border-pink-100">
           <img src={profileImage} alt="Inaho Profile" className="w-24 h-24 rounded-full object-cover border-4 border-pink-200 mb-3"/>
           <h1 className="text-lg font-bold text-pink-800">落乃いなほ</h1>
-          <p className="text-xs text-gray-500">Ochino Inaho</p>
+          <p className="text-xs text-gray-500">Ochinai Inaho</p>
           <div className="flex space-x-3 mt-4">
             <a href="https://www.youtube.com/@落乃いなほ" target="_blank" rel="noopener noreferrer" title="YouTube" className="text-gray-500 hover:text-red-600 transition-colors">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
@@ -55,7 +54,7 @@ function Sidebar({ isOpen, onClose, activeTab, handleScrollTo, headerHeight }) {
           {menuItems.map(item => (
             <button
               key={item.key}
-              onClick={() => handleMenuClick(item.key)} // Gunakan fungsi baru
+              onClick={() => handleMenuClick(item.key)} // Menggunakan fungsi baru
               className={`block w-full text-left px-4 py-2 rounded transition-all duration-200 ${
                   activeTab === item.key ? 'bg-pink-200 text-pink-900 font-semibold shadow-inner' : 'hover:bg-pink-100 text-gray-700'
               }`}

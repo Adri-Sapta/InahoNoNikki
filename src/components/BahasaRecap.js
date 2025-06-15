@@ -55,8 +55,8 @@ function AccordionItem({ date, streamTitle, words, isOpen, onClick }) {
         <div className="border border-pink-200 bg-white rounded-lg overflow-hidden shadow-sm transition-all hover:shadow-md">
             <button onClick={onClick} className="w-full flex justify-between items-center p-4 hover:bg-pink-50 focus:outline-none transition-colors">
                 <div className="text-left">
-                    <p className="font-bold text-pink-800">{date}</p>
-                    <p className="text-sm text-pink-600">{streamTitle}</p>
+                    <p className="font-bold text-pink-800 text-sm md:text-base">{date}</p>
+                    <p className="text-xs md:text-sm text-pink-600">{streamTitle}</p>
                 </div>
                 <span className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}>▼</span>
             </button>
@@ -70,14 +70,14 @@ function AccordionItem({ date, streamTitle, words, isOpen, onClick }) {
         </div>
     );
 }
+
 function BahasaRecap({ isActive, hasBeenViewed }) {
     const [openIndex, setOpenIndex] = useState(0);
 
-    // Menghitung statistik menggunakan useMemo agar tidak dihitung ulang setiap render
     const stats = useMemo(() => {
         const totalWords = recapData.reduce((acc, item) => acc + item.words.length, 0);
         let level = 'Dasar (Beginner)';
-        let nextLevelTarget = 500; // Target untuk level selanjutnya
+        let nextLevelTarget = 500;
         if (totalWords >= 5000) {
             level = 'Lanjutan (Advanced)';
             nextLevelTarget = 10000;
@@ -91,34 +91,30 @@ function BahasaRecap({ isActive, hasBeenViewed }) {
 
     return (
         <div className={`transition-all duration-700 ease-in-out ${hasBeenViewed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} ${isActive ? 'animate-pulse-active' : ''}`}>
+            <h2 className="section-title">🇮🇩 Bahasa Recap</h2>
             
-            {/* --- KARTU STATISTIK LEVEL BARU --- */}
             <div className="bg-white p-6 rounded-xl shadow-lg border border-pink-100 mb-8">
-                <h3 className="text-xl font-bold text-pink-700 mb-4 text-center">Statistik Level Bahasa</h3>
+                <h3 className="text-xl md:text-2xl font-bold text-pink-700 mb-4 text-center">Statistik Level Bahasa</h3>
                 <div className="grid grid-cols-2 gap-4 items-center">
                     <div className="text-center">
                         <p className="text-sm text-gray-500">Total Kosa Kata</p>
-                        <p className="text-4xl font-bold text-pink-600">{stats.totalWords}</p>
+                        <p className="text-3xl md:text-4xl font-bold text-pink-600">{stats.totalWords}</p>
                     </div>
                     <div className="text-center">
                         <p className="text-sm text-gray-500">Level Saat Ini</p>
-                        <p className="text-2xl font-bold text-pink-600">{stats.level}</p>
+                        <p className="text-lg md:text-2xl font-bold text-pink-600">{stats.level}</p>
                     </div>
                 </div>
                 <div className="mt-4">
-                    <p className="text-sm text-center text-gray-600 mb-2">
+                    <p className="text-xs md:text-sm text-center text-gray-600 mb-2">
                         Perjalanan menuju {stats.totalWords >= 1500 ? 'Lanjutan' : 'Menengah'} ({stats.totalWords}/{stats.nextLevelTarget} kata)
                     </p>
                     <div className="w-full bg-pink-100 rounded-full h-4">
-                        <div 
-                            className="bg-pink-500 h-4 rounded-full transition-all duration-500"
-                            style={{ width: `${stats.progress}%` }}
-                        ></div>
+                        <div className="bg-pink-500 h-4 rounded-full transition-all duration-500" style={{ width: `${stats.progress}%` }}></div>
                     </div>
                 </div>
             </div>
 
-            {/* Bagian Accordion */}
             <div className="space-y-4">{recapData.map((item, index) => <AccordionItem key={index} {...item} isOpen={openIndex === index} onClick={() => setOpenIndex(openIndex === index ? null : index)} />)}</div>
         </div>
     );

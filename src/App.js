@@ -28,6 +28,7 @@ function App() {
     { id: 2, message: 'Jangan lupa untuk selalu bahagia!😊', timestamp: new Date() },
   ]);
 
+  // --- STATE BARU UNTUK KONTROL SIDEBAR MOBILE ---
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const HEADER_HEIGHT_PX = 72;
@@ -38,14 +39,12 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
   
-  const homeRef = useRef(null), profileRef = useRef(null), streamRef = useRef(null), trendRef = useRef(null), growthRef = useRef(null), bahasaRef = useRef(null), examRef = useRef(null), awardsRef = useRef(null), recommendationsRef = useRef(null);
+  const homeRef = useRef(null), profileRef = useRef(null), streamRef = useRef(null), trendRef = useRef(null), growthRef = useRef(null), bahasaRef = useRef(null), examRef = useRef(null), recommendationsRef = useRef(null), awardsRef = useRef(null);
   
   useEffect(() => {
     if (isLoading) return;
-    const sections = [homeRef, profileRef, streamRef, trendRef, growthRef, bahasaRef, examRef, awardsRef, recommendationsRef];
-    // Offset untuk scroll-spy disesuaikan dengan tinggi header
-    const options = { root: null, rootMargin: `-${HEADER_HEIGHT_PX + 20}px 0px -60% 0px`, threshold: 0 };
-
+    const sections = [homeRef, profileRef, streamRef, trendRef, growthRef, bahasaRef, examRef, recommendationsRef, awardsRef];
+    const options = { root: null, rootMargin: `-${HEADER_HEIGHT_PX}px 0px -50% 0px`, threshold: 0 };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -59,19 +58,11 @@ function App() {
     return () => { sections.forEach(section => { if (section.current) observer.unobserve(section.current); }); };
   }, [isLoading]);
 
-  const sectionRefs = { home: homeRef, profile: profileRef, stream: streamRef, trend: trendRef, growth: growthRef, bahasa: bahasaRef, exam: examRef, recommendations: recommendationsRef, awards: awardsRef};
+  const sectionRefs = { home: homeRef, profile: profileRef, stream: streamRef, trend: trendRef, growth: growthRef, bahasa: bahasaRef, exam: examRef, recommendations: recommendationsRef, awards: awardsRef };
   
   const handleScrollTo = (key) => {
-    const targetKey = key === 'home' ? 'home' : key;
     const section = sectionRefs[key]?.current;
-
-     if (key === 'home') {
-        // Jika targetnya home, scroll ke paling atas
-        const mainContent = document.querySelector('main');
-        if (mainContent) {
-            mainContent.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    } else if (section) {
+    if (section) {
       const y = section.getBoundingClientRect().top + window.pageYOffset - HEADER_HEIGHT_PX;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
@@ -84,13 +75,9 @@ function App() {
     <div className="bg-pink-50 min-h-screen">
       <Preloader isLoading={isLoading} />
       
-      {/* Wrapper untuk konten utama yang hanya muncul setelah loading selesai */}
       <div className={`transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
-        
-        {/* Headbar dan Sidebar berada di luar main content untuk posisi fixed */}
-        <Headbar
-          onMenuClick={toggleSidebar} 
-          sidebarWidth={SIDEBAR_WIDTH_PX}
+        <Headbar 
+          onMenuClick={toggleSidebar}
           onNotifikasiClick={toggleNotifikasiModal}
           notifikasiCount={notifikasis.length}
         />
@@ -99,44 +86,40 @@ function App() {
           onClose={toggleSidebar}
           activeTab={activeTab} 
           handleScrollTo={handleScrollTo}
-          headerHeight={HEADER_HEIGHT_PX}
         />
         
-        {/* Kontainer utama untuk konten yang bisa di-scroll */}
+        {/* Konten utama sekarang diberi margin-left HANYA di layar besar (md:) */}
         <main 
-          className="relative md:ml-64"
-          style={{ 
-            marginLeft: `${SIDEBAR_WIDTH_PX}px`,
-          }}
+          className="relative md:ml-64" // ml-64 (256px) hanya aktif di layar medium ke atas
+          style={{ paddingTop: `${HEADER_HEIGHT_PX}px` }}
         >
           <div className="p-6">
-            {/* Setiap section diberi paddingTop agar posisinya pas di bawah header */}
-            <section id="home" ref={homeRef} style={{paddingTop: `${HEADER_HEIGHT_PX}px`}} className="-mt-6 -mx-6 px-6">
+            <section id="home" ref={homeRef}>
               <Home isActive={activeTab === 'home'} hasBeenViewed={viewedSections.home} />
             </section>
-            <section id="profile" ref={profileRef} className="section-container" style={{paddingTop: `${HEADER_HEIGHT_PX}px`}}>
+            <section id="profile" ref={profileRef} className="section-container">
               <ProfileCard isActive={activeTab === 'profile'} hasBeenViewed={viewedSections.profile} />
             </section>
-            <section id="stream" ref={streamRef} className="section-container" style={{paddingTop: `${HEADER_HEIGHT_PX}px`}}>
+            <section id="stream" ref={streamRef} className="section-container">
               <StreamStats isActive={activeTab === 'stream'} hasBeenViewed={viewedSections.stream} />
             </section>
-            <section id="trend" ref={trendRef} className="section-container" style={{paddingTop: `${HEADER_HEIGHT_PX}px`}}>
+            <section id="trend" ref={trendRef} className="section-container">
               <ViewerTrendChart isActive={activeTab === 'trend'} hasBeenViewed={viewedSections.trend} />
             </section>
-            <section id="growth" ref={growthRef} className="section-container" style={{paddingTop: `${HEADER_HEIGHT_PX}px`}}>
+            <section id="growth" ref={growthRef} className="section-container">
               <GrowthStats isActive={activeTab === 'growth'} hasBeenViewed={viewedSections.growth} />
             </section>
-            <section id="bahasa" ref={bahasaRef} className="section-container" style={{paddingTop: `${HEADER_HEIGHT_PX}px`}}>
+            <section id="bahasa" ref={bahasaRef} className="section-container">
               <BahasaRecap isActive={activeTab === 'bahasa'} hasBeenViewed={viewedSections.bahasa} />
             </section>
-            <section id="exam" ref={examRef} className="section-container" style={{paddingTop: `${HEADER_HEIGHT_PX}px`}}>
+            <section id="exam" ref={examRef} className="section-container">
               <Exam isActive={activeTab === 'exam'} hasBeenViewed={viewedSections.exam} />
             </section>
-            <section id="awards" ref={awardsRef} className="section-container" style={{paddingTop: `${HEADER_HEIGHT_PX}px`}}>
-              <Awards isActive={activeTab === 'awards'} hasBeenViewed={viewedSections.awards} />
-            </section>
-            <section id="recommendations" ref={recommendationsRef} className="section-container" style={{paddingTop: `${HEADER_HEIGHT_PX}px`}}>
+            <section id="recommendations" ref={recommendationsRef} className="section-container">
               <Recommendations isActive={activeTab === 'recommendations'} hasBeenViewed={viewedSections.recommendations} />
+            </section>
+            <section id="awards" ref={awardsRef} className="section-container">
+              <Awards isActive={activeTab === 'awards'} hasBeenViewed={viewedSections.awards} />
             </section>
           </div>
           <Footer handleScrollToHome={() => handleScrollTo('home')} />

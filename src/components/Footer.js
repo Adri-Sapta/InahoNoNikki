@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
 function Footer() {
-  // State untuk mengontrol visibilitas tombol scroll-to-top
   const [isVisible, setIsVisible] = useState(false);
 
-  // Fungsi untuk scroll ke atas
   const scrollToTop = () => {
+    // Fungsi ini akan scroll ke puncak halaman dengan halus
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
   };
 
-  // Efek untuk memunculkan/menyembunyikan tombol berdasarkan posisi scroll
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) { // Muncul setelah scroll 300px
+      // Tombol akan muncul setelah pengguna scroll ke bawah 300px
+      if (window.pageYOffset > 300) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -24,27 +23,29 @@ function Footer() {
 
     window.addEventListener('scroll', toggleVisibility);
 
-    // Cleanup listener saat komponen di-unmount
+    // Membersihkan listener saat komponen tidak lagi ditampilkan
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
   return (
-    <footer className="bg-white text-center p-6 mt-12 rounded-t-xl shadow-inner-top border-t border-pink-100">
-      <div className="text-sm text-gray-600">
+    // Padding diubah agar lebih kecil di mobile (p-4) dan lebih besar di desktop (md:p-6)
+    <footer className="bg-white text-center p-4 md:p-6 mt-12 rounded-t-xl shadow-inner-top border-t border-pink-100">
+      <div className="text-xs md:text-sm text-gray-600">
         © Copyright <strong>TurfMates</strong>. All Rights Reserved.
       </div>
-      <div className="text-xs text-gray-500 mt-1">
-        Designed & Developed with ❤️ & Dedication For Ochinai Inaho
+      <div className="text-[11px] md:text-xs text-gray-500 mt-1">
+        Designed & Developed with ❤️ & Dedication For Ochino Inaho
       </div>
 
-      {/* Tombol Scroll to Top */}
+      {/* Tombol Scroll to Top dengan ukuran dan posisi responsif */}
       {isVisible && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-5 right-5 bg-pink-600 text-white w-12 h-12 rounded-full shadow-lg hover:bg-pink-700 focus:outline-none transition-all duration-300 flex items-center justify-center"
+          // Lebih kecil & sedikit lebih ke dalam di mobile, lebih besar di desktop
+          className="fixed bottom-4 right-4 md:bottom-5 md:right-5 bg-pink-600 text-white w-10 h-10 md:w-12 md:h-12 rounded-full shadow-lg hover:bg-pink-700 focus:outline-none transition-all duration-300 flex items-center justify-center z-50"
           aria-label="Kembali ke atas"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
           </svg>
         </button>

@@ -54,7 +54,6 @@ function Home({ isActive, hasBeenViewed }) {
   }, []);
 
   return (
-    // 2. Logika kelas CSS sekarang dipisah
     <div className={`
       transition-all duration-700 ease-in-out space-y-8
       ${hasBeenViewed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}
@@ -65,12 +64,14 @@ function Home({ isActive, hasBeenViewed }) {
       <div className="rounded-xl overflow-hidden shadow-lg border border-pink-100">
         <Carousel autoPlay infiniteLoop showThumbs={false} showStatus={false} interval={4000}>
           {carouselImages.map((imgSrc, index) => (
-            <div key={index} className="relative h-80 md:h-[30rem]">
+            // Mengubah tinggi di mobile agar tidak terlalu besar
+            <div key={index} className="relative h-64 md:h-80 lg:h-[30rem]">
               <div style={{ backgroundImage: `url(${imgSrc})` }} className="w-full h-full bg-cover bg-center"></div>
               <div className="absolute inset-0 bg-black bg-opacity-40"></div>
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10 p-4">
-                <h2 className="text-4xl md:text-6xl font-bold text-shadow-md mb-3">落乃いなほ</h2>
-                <div className="text-2xl md:text-3xl text-gray-200 h-12 flex items-center justify-center text-shadow-sm">
+                {/* Mengubah ukuran teks di mobile */}
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-shadow-md mb-2">落乃いなほ</h2>
+                <div className="text-xl md:text-2xl lg:text-3xl text-gray-200 h-12 flex items-center justify-center text-shadow-sm">
                   <span className="mr-3">I'm a</span>
                   <Typewriter options={{ strings: ['VTuber', 'Bahasa Indonesia Enjoyer', 'Horse Racing Expert'], autoStart: true, loop: true, delay: 75 }} />
                 </div>
@@ -82,15 +83,17 @@ function Home({ isActive, hasBeenViewed }) {
 
       {/* Kartu Selamat Datang */}
       <div className="bg-white p-6 rounded-xl shadow-lg border border-pink-100">
-        <h2 className="text-3xl font-bold text-pink-700 mb-3">Selamat Datang di Catatan Perjalanan Inaho!</h2>
+        {/* Mengubah ukuran teks di mobile */}
+        <h2 className="text-2xl md:text-3xl font-bold text-pink-700 mb-3">Selamat Datang di Catatan Perjalanan Inaho!</h2>
         <p className="text-gray-700 leading-relaxed">
-          From TurfMates to 落乃いなほ (Ochino Inaho). Made With Love Absolutely
+          From TurfMates to 落乃いなほ (Ochinai Inaho). Made With Love Absolutely
         </p>
       </div>
 
       {/* Bagian Grid Stream Terbaru */}
       <div className="bg-white p-6 rounded-xl shadow-lg border border-pink-100">
-        <h2 className="text-3xl font-bold text-pink-700 mb-4">Stream Terbaru</h2>
+        {/* Mengubah ukuran teks di mobile */}
+        <h2 className="text-2xl md:text-3xl font-bold text-pink-700 mb-4">Stream Terbaru</h2>
         {isLoading && <p className="text-center text-gray-500">Memuat stream terbaru...</p>}
         {error && (<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"><strong className="font-bold">Terjadi Masalah! </strong><span className="block sm:inline">{error}</span></div>)}
         {!isLoading && !error && (
@@ -107,7 +110,6 @@ function Home({ isActive, hasBeenViewed }) {
           </div>
         )}
       </div>
-
     </div>
   );
 }
