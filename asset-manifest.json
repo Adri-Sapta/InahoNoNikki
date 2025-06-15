@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/InahoNoNikki/static/css/main.4f3aa92f.css",
-    "main.js": "/InahoNoNikki/static/js/main.57fb6df7.js",
+    "main.css": "/InahoNoNikki/static/css/main.75535ac9.css",
+    "main.js": "/InahoNoNikki/static/js/main.e0cfdbe4.js",
     "static/js/453.1d3494c7.chunk.js": "/InahoNoNikki/static/js/453.1d3494c7.chunk.js",
     "static/media/carouselInaho03.png": "/InahoNoNikki/static/media/carouselInaho03.69c6c207bf6ed126c61d.png",
     "static/media/carouselInaho01.png": "/InahoNoNikki/static/media/carouselInaho01.b28a33a33254b1b81bcb.png",
@@ -20,12 +20,12 @@
     "static/media/candiborobudur.jpg": "/InahoNoNikki/static/media/candiborobudur.3014a94d9a4546941723.jpg",
     "static/media/membatik.jpg": "/InahoNoNikki/static/media/membatik.eb521a7d8758d84925d2.jpg",
     "index.html": "/InahoNoNikki/index.html",
-    "main.4f3aa92f.css.map": "/InahoNoNikki/static/css/main.4f3aa92f.css.map",
-    "main.57fb6df7.js.map": "/InahoNoNikki/static/js/main.57fb6df7.js.map",
+    "main.75535ac9.css.map": "/InahoNoNikki/static/css/main.75535ac9.css.map",
+    "main.e0cfdbe4.js.map": "/InahoNoNikki/static/js/main.e0cfdbe4.js.map",
     "453.1d3494c7.chunk.js.map": "/InahoNoNikki/static/js/453.1d3494c7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4f3aa92f.css",
-    "static/js/main.57fb6df7.js"
+    "static/css/main.75535ac9.css",
+    "static/js/main.e0cfdbe4.js"
   ]
 }
