@@ -30,9 +30,51 @@ function App() {
 
   // --- STATE BARU UNTUK KONTROL SIDEBAR MOBILE ---
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [allVideoData, setAllVideoData] = useState([]);
+  const [apiError, setApiError] = useState(null);
   
   const HEADER_HEIGHT_PX = 72;
   const SIDEBAR_WIDTH_PX = 256;
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      const apiKey = process.env.REACT_APP_YOUTUBE_API_KEY;
+      const channelId = 'UCxk-xk9E_GS8Z5qJ-iBYLyw';
+      if (!apiKey) {
+        setApiError("API Key tidak ditemukan!");
+        return;
+      }
+      try {
+        // Langkah 1: Dapatkan daftar ID video
+        const searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&order=date&maxResults=50&type=video`;
+        const searchResponse = await fetch(searchUrl);
+        const searchData = await searchResponse.json();
+        if (searchData.error) throw new Error(`Search API Error: ${searchData.error.message}`);
+
+        const videoIds = searchData.items.map(item => item.id.videoId).join(',');
+        if (!videoIds) {
+          setAllVideoData([]);
+          return;
+        }
+
+        // Langkah 2: Dapatkan statistik untuk semua video tersebut
+        const statsUrl = `https://www.googleapis.com/youtube/v3/videos?key=${apiKey}&id=${videoIds}&part=snippet,statistics`;
+        const statsResponse = await fetch(statsUrl);
+        const statsData = await statsResponse.json();
+        if (statsData.error) throw new Error(`Videos API Error: ${statsData.error.message}`);
+        
+        // Simpan data final ke state utama
+        setAllVideoData(statsData.items);
+
+      } catch (err) {
+        setApiError(err.message);
+      }
+    };
+    
+    fetchAllData();
+    const timer = setTimeout(() => setIsLoading(false), 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2500);
@@ -94,17 +136,17 @@ function App() {
           style={{ paddingTop: `${HEADER_HEIGHT_PX}px` }}
         >
           <div className="p-6">
-            <section id="home" ref={homeRef}>
-              <Home isActive={activeTab === 'home'} hasBeenViewed={viewedSections.home} />
+           <section id="home" ref={homeRef}>
+              <Home isActive={activeTab === 'home'} hasBeenViewed={viewedSections.home} videoData={allVideoData.slice(0, 3)} apiError={apiError} />
             </section>
             <section id="profile" ref={profileRef} className="section-container">
               <ProfileCard isActive={activeTab === 'profile'} hasBeenViewed={viewedSections.profile} />
             </section>
             <section id="stream" ref={streamRef} className="section-container">
-              <StreamStats isActive={activeTab === 'stream'} hasBeenViewed={viewedSections.stream} />
+              <StreamStats isActive={activeTab === 'stream'} hasBeenViewed={viewedSections.stream} videoData={allVideoData} apiError={apiError} />
             </section>
             <section id="trend" ref={trendRef} className="section-container">
-              <ViewerTrendChart isActive={activeTab === 'trend'} hasBeenViewed={viewedSections.trend} />
+              <ViewerTrendChart isActive={activeTab === 'trend'} hasBeenViewed={viewedSections.trend} videoData={allVideoData} apiError={apiError} />
             </section>
             <section id="growth" ref={growthRef} className="section-container">
               <GrowthStats isActive={activeTab === 'growth'} hasBeenViewed={viewedSections.growth} />
