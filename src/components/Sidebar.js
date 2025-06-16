@@ -9,7 +9,7 @@ function Sidebar({ isOpen, onClose, activeTab, handleScrollTo }) {
     { key: 'stream', label: '📈 Stream Stats' },
     { key: 'trend', label: '📊 Viewer Trends' },
     { key: 'growth', label: '🚀 Pencapaian' },
-    { key: 'bahasa', label: '�🇩 Bahasa Recap' },
+    { key: 'bahasa', label: '🇮🇩 Bahasa Recap' },
     { key: 'exam', label: '📝 Ujian' },
     { key: 'recommendations', label: '❤️ Rekomendasi' },
     { key: 'awards', label: '🏆 Penghargaan' },
