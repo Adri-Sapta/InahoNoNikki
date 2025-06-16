@@ -35,126 +35,120 @@ const categoryOrder = [
     'Lain-lain'
 ];
 
+// 1. Terima 'videoData' dan 'apiError' sebagai props
 function ViewerTrendChart({ isActive, hasBeenViewed, videoData, apiError }) {
-  const [categorizedStreams, setCategorizedStreams] = useState({});
-  const [activeCategory, setActiveCategory] = useState('Games');
-  const [loading, setLoading] = useState(true);
+  const [categorizedStreams, setCategorizedStreams] = useState({});
+  const [activeCategory, setActiveCategory] = useState('Games');
+  
+  // 2. useEffect sekarang hanya memproses data dari props
+  useEffect(() => {
+    if (!videoData || videoData.length === 0) return;
 
-  useEffect(() => {
-    // If there's an API error from App.js, set loading to false and stop processing.
-    if (apiError) {
-      setLoading(false);
-      return;
+    const debutDate = new Date('2024-05-01');
+    const processedData = videoData
+      .filter(video => {
+        const publishDate = new Date(video.snippet.publishedAt);
+        const isExcludedByTitle = excludedTitles.some(excluded => video.snippet.title.includes(excluded));
+        return publishDate >= debutDate && !isExcludedByTitle;
+      })
+      .reduce((acc, video) => {
+        const category = categorizeVideo(video.snippet.title);
+        if (!acc[category]) {
+          acc[category] = [];
+        }
+        acc[category].push(video);
+        return acc;
+      }, {});
+
+    for (const category in processedData) {
+      processedData[category].sort((a, b) => Number(b.statistics.viewCount) - Number(a.statistics.viewCount));
     }
+    
+    setCategorizedStreams(processedData);
+  }, [videoData]);
 
-    if (videoData.length > 0) {
-      const debutDate = new Date('2024-05-01');
-      const processedData = videoData
-        .filter(video => {
-          const publishDate = new Date(video.snippet.publishedAt);
-          const isExcludedByTitle = excludedTitles.some(excluded => video.snippet.title.includes(excluded));
-          return publishDate >= debutDate && !isExcludedByTitle;
-        })
-        .reduce((acc, video) => {
-          const category = categorizeVideo(video.snippet.title);
-          if (!acc[category]) {
-            acc[category] = [];
-          }
-          acc[category].push(video);
-          return acc;
-        }, {});
+  const topVideos = categorizedStreams[activeCategory]?.slice(0, 5) || [];
+  const chartData = {
+    labels: topVideos.map(v => v.snippet.title.substring(0, 25) + '...'),
+    datasets: [{
+      label: 'Jumlah Views',
+      data: topVideos.map(v => v.statistics.viewCount),
+      backgroundColor: '#ec4899',
+      borderColor: '#be185d',
+      borderWidth: 1,
+    }],
+  };
 
-      for (const category in processedData) {
-        processedData[category].sort((a, b) => Number(b.statistics.viewCount) - Number(a.statistics.viewCount));
-      }
-
-      setCategorizedStreams(processedData);
-      setLoading(false);
-    } else if (videoData.length === 0 && !apiError) {
-        // If videoData is empty and there's no API error, it means no videos were found or processed.
-        setLoading(false);
+  const chartOptions = {
+    indexAxis: 'y', 
+    responsive: true,
+    maintainAspectRatio: false, // Penting untuk mengontrol tinggi
+    plugins: { 
+      legend: { display: false } 
+    },
+    scales: { 
+      x: { 
+        ticks: { 
+          font: { size: 10 },
+          callback: value => value >= 1000 ? `${value / 1000}K` : value 
+        } 
+      },
+      y: {
+        ticks: {
+          font: { size: 10 }
+        }
+      }
     }
-  }, [videoData, apiError]); // Depend on videoData and apiError props
+  };
 
-  const topVideos = categorizedStreams[activeCategory]?.slice(0, 5) || [];
-  const chartData = {
-    labels: topVideos.map(v => v.snippet.title.substring(0, 25) + '...'),
-    datasets: [{
-      label: 'Jumlah Views',
-      data: topVideos.map(v => v.statistics.viewCount),
-      backgroundColor: '#ec4899',
-      borderColor: '#be185d',
-      borderWidth: 1,
-    }],
-  };
+  return (
+    <div className={`transition-all duration-700 ease-in-out ${hasBeenViewed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} ${isActive ? 'animate-pulse-active' : ''}`}>
+      <h2 className="section-title">📊 Viewer Trends</h2>
+      <div className="bg-white p-4 md:p-6 rounded-xl shadow-lg border border-pink-100 space-y-6">
+        <div>
+          <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-3">Pilih Kategori:</h3>
+          <div className="flex flex-wrap gap-2">
+            {categoryOrder
+              .filter(category => categorizedStreams[category])
+              .map(category => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium rounded-full transition-colors duration-200 ${
+                    activeCategory === category
+                      ? 'bg-pink-600 text-white shadow-md'
+                      : 'bg-gray-200 text-gray-700 hover:bg-pink-100'
+                  }`}
+                >
+                  {category}
+                </button>
+            ))}
+          </div>
+        </div>
 
-  const chartOptions = {
-    indexAxis: 'y',
-    responsive: true,
-    maintainAspectRatio: false, // Penting untuk mengontrol tinggi
-    plugins: {
-      legend: { display: false }
-    },
-    scales: {
-      x: {
-        ticks: {
-          font: { size: 10 },
-          callback: value => value >= 1000 ? `${value / 1000}K` : value
-        }
-      },
-      y: {
-        ticks: {
-          font: { size: 10 }
-        }
-      }
-    }
-  };
+        {/* 3. Tampilan loading/error sekarang dikontrol oleh props dari App.js */}
+        {!videoData && !apiError && <p className="text-center text-gray-500">Menganalisis tren...</p>}
+        {apiError && <p className="text-center text-red-500">Error: {apiError}</p>}
+        
+        {videoData && Object.keys(categorizedStreams).length > 0 && (
+          <div className="p-2 md:p-4 border rounded-lg bg-pink-50/50">
+            <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-4 text-center">Top 5 Video Terpopuler: {activeCategory}</h3>
+            {topVideos.length > 0 ? (
+               <div className="relative h-64 md:h-80">
+                <Bar options={chartOptions} data={chartData} />
+              </div>
+            ) : (
+              <p className="text-center text-gray-500 py-8">Tidak ada data untuk kategori ini.</p>
+            )}
+          </div>
+        )}
 
-  return (
-    <div className={`transition-all duration-700 ease-in-out ${hasBeenViewed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} ${isActive ? 'animate-pulse-active' : ''}`}>
-      <h2 className="section-title">📊 Viewer Trends</h2>
-      <div className="bg-white p-4 md:p-6 rounded-xl shadow-lg border border-pink-100 space-y-6">
-        <div>
-          <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-3">Pilih Kategori:</h3>
-          <div className="flex flex-wrap gap-2">
-            {categoryOrder
-              .filter(category => categorizedStreams[category])
-              .map(category => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium rounded-full transition-colors duration-200 ${
-                    activeCategory === category
-                      ? 'bg-pink-600 text-white shadow-md'
-                      : 'bg-gray-200 text-gray-700 hover:bg-pink-100'
-                  }`}
-                >
-                  {category}
-                </button>
-            ))}
-          </div>
-        </div>
-
-        {loading && <p className="text-center text-gray-500">Menganalisis tren...</p>}
-        {apiError && <p className="text-center text-red-500">Error: {apiError}</p>}
-        {!loading && !apiError && Object.keys(categorizedStreams).length > 0 && (
-          <div className="p-2 md:p-4 border rounded-lg bg-pink-50/50">
-            <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-4 text-center">Top 5 Video Terpopuler: {activeCategory}</h3>
-            {topVideos.length > 0 ? (
-               <div className="relative h-64 md:h-80">
-                <Bar options={chartOptions} data={chartData} />
-              </div>
-            ) : (
-              <p className="text-center text-gray-500 py-8">Tidak ada data untuk kategori ini.</p>
-            )}
-          </div>
-        )}
-         {!loading && !apiError && Object.keys(categorizedStreams).length === 0 && (
-          <p className="text-center text-gray-500 py-8">Belum ada video yang bisa dianalisis.</p>
-        )}
-      </div>
-    </div>
-  );
+         {videoData && Object.keys(categorizedStreams).length === 0 && !apiError && (
+          <p className="text-center text-gray-500 py-8">Belum ada video yang bisa dianalisis.</p>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default ViewerTrendChart;
