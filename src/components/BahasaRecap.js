@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-const recapData = [
+const recapDataRaw = [
   {
     date: '19 Mei 2025',
     streamTitle: 'Stream Belajar Bahasa Pertama',
@@ -48,7 +48,31 @@ const recapData = [
       'Nama Orang Dikanjikan', 'mawaru / mawateru = Berputar / Berkeliling', 'Hari'
     ]
   },
+  {
+    date: '16 Juni 2025',
+    streamTitle: 'Kosa Kata Konseptual & Ekspresi',
+    words: [
+      'Pasti, Bisa, Seru', 'Hebat, Mantap, Ayo', 'Mungkin, Kayaknya', 
+      'Kapan, Kapanpun (Kata Tanya)', 'Mustahil, Tidak Mungkin', 
+      'Hantu, Monster', 'Legenda Nyi Roro Kidul'
+    ]
+  },
 ];
+
+const monthMap = {
+  'Januari': 0, 'Februari': 1, 'Maret': 2, 'April': 3, 'Mei': 4, 'Juni': 5,
+  'Juli': 6, 'Agustus': 7, 'September': 8, 'Oktober': 9, 'November': 10, 'Desember': 11
+};
+
+const parseDate = (dateString) => {
+  const parts = dateString.split(' ');
+  const day = parseInt(parts[0], 10);
+  const month = monthMap[parts[1]];
+  const year = parseInt(parts[2], 10);
+  return new Date(year, month, day);
+};
+
+const recapData = recapDataRaw.sort((a, b) => parseDate(b.date) - parseDate(a.date));
 
 function AccordionItem({ date, streamTitle, words, isOpen, onClick }) {
     return (
@@ -73,6 +97,8 @@ function AccordionItem({ date, streamTitle, words, isOpen, onClick }) {
 
 function BahasaRecap({ isActive, hasBeenViewed }) {
     const [openIndex, setOpenIndex] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(3);
 
     const stats = useMemo(() => {
         const totalWords = recapData.reduce((acc, item) => acc + item.words.length, 0);
@@ -89,33 +115,71 @@ function BahasaRecap({ isActive, hasBeenViewed }) {
         return { totalWords, level, progress, nextLevelTarget };
     }, []);
 
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = recapData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(recapData.length / itemsPerPage);
+
+    const paginate = (pageNumber) => {
+        setOpenIndex(null);
+        setCurrentPage(pageNumber);
+    };
+
     return (
         <div className={`transition-all duration-700 ease-in-out ${hasBeenViewed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} ${isActive ? 'animate-pulse-active' : ''}`}>
             <h2 className="section-title">🇮🇩 Bahasa Recap</h2>
             
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-pink-100 mb-8">
-                <h3 className="text-xl md:text-2xl font-bold text-pink-700 mb-4 text-center">Statistik Level Bahasa</h3>
-                <div className="grid grid-cols-2 gap-4 items-center">
-                    <div className="text-center">
-                        <p className="text-sm text-gray-500">Total Kosa Kata</p>
-                        <p className="text-3xl md:text-4xl font-bold text-pink-600">{stats.totalWords}</p>
+            <div className="bg-white p-4 md:p-6 rounded-xl shadow-lg border border-pink-100 space-y-6">
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <h3 className="text-xl md:text-2xl font-bold text-pink-700 mb-4 text-center">Statistik Level Bahasa</h3>
+                    <div className="grid grid-cols-2 gap-4 items-center">
+                        <div className="text-center">
+                            <p className="text-sm text-gray-500">Total Kosa Kata</p>
+                            <p className="text-3xl md:text-4xl font-bold text-pink-600">{stats.totalWords}</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-sm text-gray-500">Level Saat Ini</p>
+                            <p className="text-lg md:text-2xl font-bold text-pink-600">{stats.level}</p>
+                        </div>
                     </div>
-                    <div className="text-center">
-                        <p className="text-sm text-gray-500">Level Saat Ini</p>
-                        <p className="text-lg md:text-2xl font-bold text-pink-600">{stats.level}</p>
+                    <div className="mt-4">
+                        <p className="text-xs md:text-sm text-center text-gray-600 mb-2">
+                            Perjalanan menuju {stats.totalWords >= 1500 ? 'Lanjutan' : 'Menengah'} ({stats.totalWords}/{stats.nextLevelTarget} kata)
+                        </p>
+                        <div className="w-full bg-pink-100 rounded-full h-4">
+                            <div className="bg-pink-500 h-4 rounded-full transition-all duration-500" style={{ width: `${stats.progress}%` }}></div>
+                        </div>
                     </div>
                 </div>
-                <div className="mt-4">
-                    <p className="text-xs md:text-sm text-center text-gray-600 mb-2">
-                        Perjalanan menuju {stats.totalWords >= 1500 ? 'Lanjutan' : 'Menengah'} ({stats.totalWords}/{stats.nextLevelTarget} kata)
-                    </p>
-                    <div className="w-full bg-pink-100 rounded-full h-4">
-                        <div className="bg-pink-500 h-4 rounded-full transition-all duration-500" style={{ width: `${stats.progress}%` }}></div>
-                    </div>
-                </div>
-            </div>
 
-            <div className="space-y-4">{recapData.map((item, index) => <AccordionItem key={index} {...item} isOpen={openIndex === index} onClick={() => setOpenIndex(openIndex === index ? null : index)} />)}</div>
+                <div className="space-y-4 min-h-[350px]">
+                    {currentItems.map((item, index) => (
+                        <AccordionItem key={item.date} {...item} isOpen={openIndex === indexOfFirstItem + index} onClick={() => setOpenIndex(openIndex === indexOfFirstItem + index ? null : indexOfFirstItem + index)} />
+                    ))}
+                </div>
+
+                {totalPages > 1 && (
+                    <nav className="flex items-center justify-between border-t border-gray-100 pt-4">
+                        <button
+                            onClick={() => paginate(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                        >
+                            Sebelumnya
+                        </button>
+                        <div className="text-sm text-gray-500">
+                            Halaman {currentPage} dari {totalPages}
+                        </div>
+                        <button
+                            onClick={() => paginate(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                        >
+                            Selanjutnya
+                        </button>
+                    </nav>
+                )}
+            </div>
         </div>
     );
 }
