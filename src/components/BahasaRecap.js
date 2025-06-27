@@ -48,7 +48,7 @@ const recapDataRaw = [
     ]
   },
   {
-    date: '13 Juni 2025', // Tahun saya sesuaikan berdasarkan data Anda
+    date: '13 Juni 2025', // Tahun sesuaikan berdasarkan data 
     streamTitle: 'Inaho & Viewers',
     words: [
       'wakaru / shiru = tahu / mengetahui / mengerti', 'about = tentang / mengenai',
