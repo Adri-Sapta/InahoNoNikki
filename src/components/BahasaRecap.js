@@ -2,6 +2,14 @@ import React, { useState, useMemo } from 'react';
 
 const recapDataRaw = [
   {
+    date: '23 Juni 2025',
+    streamTitle: 'Ekspresi Keinginan & Frekuensi',
+    words: [
+      'berminat', 'tertarik', 'gak mau', 'komik', 'sampai', 'mati', 
+      'kadang-kadang', 'nanti', 'lagi', 'hanya', 'hafal', 'kosakata'
+    ]
+  },
+  {
     date: '19 Mei 2025',
     streamTitle: 'Stream Belajar Bahasa Pertama',
     words: [

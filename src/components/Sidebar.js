@@ -15,7 +15,7 @@ function Sidebar({ isOpen, onClose, activeTab, handleScrollTo }) {
     { key: 'awards', label: '🏆 Penghargaan' },
   ];
 
-  // Fungsi ini akan menjalankan scroll DAN menutup sidebar (khusus mobile)
+  // Fungsi scroll DAN menutup sidebar (khusus mobile)
   const handleMenuClick = (key) => {
     handleScrollTo(key);
     onClose(); // Memberi sinyal ke App.js untuk menutup sidebar
@@ -34,7 +34,7 @@ function Sidebar({ isOpen, onClose, activeTab, handleScrollTo }) {
         className={`bg-white p-4 shadow-lg fixed left-0 top-0 z-50 flex flex-col h-screen w-64
                    transition-transform duration-300 ease-in-out
                    ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
-                   md:translate-x-0`} // Di layar besar (md), sidebar akan selalu terlihat
+                   md:translate-x-0`}
       >
         <div className="flex flex-col items-center text-center pb-4 border-b border-pink-100">
           <img src={profileImage} alt="Inaho Profile" className="w-24 h-24 rounded-full object-cover border-4 border-pink-200 mb-3"/>
@@ -54,7 +54,7 @@ function Sidebar({ isOpen, onClose, activeTab, handleScrollTo }) {
           {menuItems.map(item => (
             <button
               key={item.key}
-              onClick={() => handleMenuClick(item.key)} // Menggunakan fungsi baru
+              onClick={() => handleMenuClick(item.key)} 
               className={`block w-full text-left px-4 py-2 rounded transition-all duration-200 ${
                   activeTab === item.key ? 'bg-pink-200 text-pink-900 font-semibold shadow-inner' : 'hover:bg-pink-100 text-gray-700'
               }`}

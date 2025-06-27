@@ -1,4 +1,5 @@
 import React from 'react';
+// Preview Sesi Ujian
 import examThumbnail from '../assets/thumbnails/thumb01.png';
 
 const examData = {

@@ -4,7 +4,7 @@ function Footer() {
   const [isVisible, setIsVisible] = useState(false);
 
   const scrollToTop = () => {
-    // Fungsi ini akan scroll ke puncak halaman dengan halus
+    // Fungsi scroll ke atas halaman 
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
@@ -13,7 +13,7 @@ function Footer() {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      // Tombol akan muncul setelah pengguna scroll ke bawah 300px
+      // Tombol akan muncul setelah pengguna scroll ke bawah 
       if (window.pageYOffset > 300) {
         setIsVisible(true);
       } else {
@@ -28,16 +28,16 @@ function Footer() {
   }, []);
 
   return (
-    // Padding diubah agar lebih kecil di mobile (p-4) dan lebih besar di desktop (md:p-6)
+    // Padding diubah agar lebih kecil di mobile dan lebih besar di desktop
     <footer className="bg-white text-center p-4 md:p-6 mt-12 rounded-t-xl shadow-inner-top border-t border-pink-100">
       <div className="text-xs md:text-sm text-gray-600">
         © Copyright <strong>TurfMates</strong>. All Rights Reserved.
       </div>
       <div className="text-[11px] md:text-xs text-gray-500 mt-1">
-        Designed & Developed with ❤️ & Dedication For Ochino Inaho
+        Designed & Developed with ❤️ & Dedication For Ochinai Inaho
       </div>
 
-      {/* Tombol Scroll to Top dengan ukuran dan posisi responsif */}
+      {/* Tombol Scroll to Top responsif */}
       {isVisible && (
         <button
           onClick={scrollToTop}

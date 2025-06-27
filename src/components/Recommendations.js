@@ -25,6 +25,7 @@ const recommendations = [
 function Recommendations({ isActive, hasBeenViewed }) {
   return (
     <div className={`transition-all duration-700 ease-in-out ${hasBeenViewed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} ${isActive ? 'animate-pulse-active' : ''}`}>
+      <h2 className="section-title">❤️ Inaho WishList</h2>
       <div className="bg-white p-6 rounded-xl shadow-lg border border-pink-100">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {recommendations.map((rec, index) => (

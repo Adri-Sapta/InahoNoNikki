@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 import Preloader from './components/Preloader';
-import Sidebar from './components/Sidebar'; // Pastikan Sidebar.js (S besar) atau sesuaikan import
-import Headbar from './components/Headbar'; // Pastikan Headbar.js (H besar) atau sesuaikan import
+import Sidebar from './components/Sidebar'; 
+import Headbar from './components/Headbar'; 
 import Home from './components/Home';
 import ProfileCard from './components/ProfileCard';
 import StreamStats from './components/StreamStats';
@@ -28,7 +28,7 @@ function App() {
     { id: 2, message: 'Jangan lupa untuk selalu bahagia!😊', timestamp: new Date() },
   ]);
 
-  // --- STATE BARU UNTUK KONTROL SIDEBAR MOBILE ---
+  // --- STATE UNTUK KONTROL SIDEBAR MOBILE ---
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [allVideoData, setAllVideoData] = useState([]);
   const [apiError, setApiError] = useState(null);
@@ -45,7 +45,7 @@ function App() {
         return;
       }
       try {
-        // Langkah 1: Dapatkan daftar ID video
+        // daftar ID video
         const searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&order=date&maxResults=50&type=video`;
         const searchResponse = await fetch(searchUrl);
         const searchData = await searchResponse.json();
@@ -57,7 +57,7 @@ function App() {
           return;
         }
 
-        // Langkah 2: Dapatkan statistik untuk semua video tersebut
+        // statistik untuk semua video tersebut
         const statsUrl = `https://www.googleapis.com/youtube/v3/videos?key=${apiKey}&id=${videoIds}&part=snippet,statistics`;
         const statsResponse = await fetch(statsUrl);
         const statsData = await statsResponse.json();
@@ -130,9 +130,9 @@ function App() {
           handleScrollTo={handleScrollTo}
         />
         
-        {/* Konten utama sekarang diberi margin-left HANYA di layar besar (md:) */}
+        {/* Konten margin-left */}
         <main 
-          className="relative md:ml-64" // ml-64 (256px) hanya aktif di layar medium ke atas
+          className="relative md:ml-64"
           style={{ paddingTop: `${HEADER_HEIGHT_PX}px` }}
         >
           <div className="p-6">

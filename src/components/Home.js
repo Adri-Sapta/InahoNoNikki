@@ -2,19 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import Typewriter from 'typewriter-effect';
 
-// Impor gambar Anda
+// Impor gambar
 import img1 from '../assets/carousel/carouselInaho01.png';
 import img2 from '../assets/carousel/carouselInaho02.png';
-import img3 from '../assets/carousel/carouselInaho03.png'; // Menggunakan gambar pertama lagi, sesuai kode Anda
+import img3 from '../assets/carousel/carouselInaho03.png';
 
-// Impor CSS wajib untuk carousel
+// Impor CSS untuk carousel
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
 
 const carouselImages = [img1, img2, img3];
 
 function Home({ isActive, hasBeenViewed, videoData, apiError }) {
 
-  // --- SEMUA LOGIC useState DAN useEffect UNTUK FETCH DATA DIHAPUS DARI SINI ---
 
   return (
     <div className={`
@@ -54,7 +53,7 @@ function Home({ isActive, hasBeenViewed, videoData, apiError }) {
       <div className="bg-white p-6 rounded-xl shadow-lg border border-pink-100">
         <h2 className="text-2xl md:text-3xl font-bold text-pink-700 mb-4">Stream Terbaru</h2>
         
-        {/* 2. Logika tampilan sekarang menggunakan props, bukan state lokal */}
+        {/*Logika tampilan menggunakan props*/}
         {apiError && (<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"><strong className="font-bold">Terjadi Masalah! </strong><span className="block sm:inline">{apiError}</span></div>)}
         
         {!apiError && !videoData && <p className="text-center text-gray-500">Memuat stream terbaru...</p>}

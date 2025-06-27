@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 // --- DATABASE MILESTONE MANUAL ---
-// Saya perbarui berdasarkan informasi Anda. Anda bisa menyesuaikannya lagi nanti.
 const milestones = [
   { date: 'Juni 2025', event: 'Mencapai 14,000 Subscribers', icon: '💖' },
   { date: 'Awal Juni 2025', event: 'Mencapai 10,000 Subscribers', icon: '🎉' },
@@ -9,7 +8,6 @@ const milestones = [
   { date: 'Pertengahan Mei 2025', event: 'Mencapai 5,000 Subscribers', icon: '👍' },
   { date: '15 Mei 2025', event: 'Stream Karaoke Pertama', icon: '🎤' },
   { date: '3 Mei 2025', event: 'Debut Resmi di YouTube', icon: '🚀' },
-  // Tambahkan milestone lainnya di sini jika Anda ingat
 ];
 
 function GrowthStats({ isActive, hasBeenViewed }) {

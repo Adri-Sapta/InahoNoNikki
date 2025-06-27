@@ -1,5 +1,5 @@
 import React from 'react';
-
+// Fitur yang gagal ditampilkan
 const keibaStats = {
   knownBets: 3,
   wins: 2,

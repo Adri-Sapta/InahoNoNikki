@@ -7,10 +7,10 @@ function Headbar({ onMenuClick, onNotifikasiClick, notifikasiCount }) {
       className="bg-white fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-4 shadow-sm border-b border-pink-100"
       style={{ height: '72px' }}
     >
-      {/* --- TOMBOL MENU BARU (HANYA MUNCUL DI MOBILE) --- */}
+      {/* --- TOMBOL MENU BARU (MOBILE) --- */}
       <button 
         onClick={onMenuClick}
-        className="p-2 rounded-full text-gray-500 hover:bg-pink-100 md:hidden" // md:hidden menyembunyikannya di layar besar
+        className="p-2 rounded-full text-gray-500 hover:bg-pink-100 md:hidden" 
         aria-label="Buka menu"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,7 +29,7 @@ function Headbar({ onMenuClick, onNotifikasiClick, notifikasiCount }) {
       {/* Tombol Notifikasi */}
       <button 
           onClick={onNotifikasiClick} 
-          className="buttonnotif" // Menggunakan kelas dari app.css Anda
+          className="buttonnotif" // Menggunakan kelas dari app.css 
           aria-label="Tampilkan notifikasi"
         >
           {/* Menggunakan SVG lonceng baru dari Uiverse */}

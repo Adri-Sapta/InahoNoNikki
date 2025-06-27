@@ -1,5 +1,5 @@
 import React from 'react';
-// Pastikan Anda sudah membuat folder 'awards' dan menaruh gambar sertifikat di dalamnya
+// Komponen Fitur Sertifikat Preview
 import certificateImage from '../assets/awards/sertif01.jpeg'; 
 
 function Awards({ isActive, hasBeenViewed }) {

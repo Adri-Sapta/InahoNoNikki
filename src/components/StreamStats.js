@@ -13,7 +13,7 @@ import {
   Filler,
 } from 'chart.js';
 
-// 2. Daftarkan modul-modul Chart.js
+//modul-modul Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -47,9 +47,9 @@ function StreamStats({ isActive, hasBeenViewed, videoData, apiError }) {
     { value: 12, label: 'Desember' }
   ];
 
-  // 2. useEffect sekarang hanya fokus untuk memfilter data yang sudah ada (dari props)
+  //useEffect fokus untuk memfilter data yang sudah ada (dari props)
   useEffect(() => {
-    // Gunakan videoData dari props, atau array kosong jika belum ada
+    // videoData dari props
     let streams = videoData || []; 
     
     streams = streams.filter(stream => new Date(stream.snippet.publishedAt).getFullYear() === selectedYear);
@@ -110,7 +110,7 @@ function StreamStats({ isActive, hasBeenViewed, videoData, apiError }) {
           </div>
         </div>
 
-        {/* 3. Tampilan loading/error sekarang dikontrol oleh props dari App.js */}
+        {/*Tampilan loading/error sekarang dikontrol oleh props dari App.js */}
         {!videoData && !apiError && <p className="text-center text-gray-500">Memuat statistik...</p>}
         {apiError && <p className="text-center text-red-500">Error: {apiError}</p>}
         {videoData && (

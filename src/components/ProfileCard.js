@@ -1,7 +1,7 @@
 import React from 'react';
 import profileImage from '../assets/inahoImg01.png';
 
-// 1. Terima dua prop: 'isActive' untuk pulse, 'hasBeenViewed' untuk reveal
+//prop: 'isActive' untuk pulse, 'hasBeenViewed' untuk reveal
 function ProfileCard({ isActive, hasBeenViewed }) {
   return (
     <div className={`
@@ -19,7 +19,7 @@ function ProfileCard({ isActive, hasBeenViewed }) {
           className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-pink-200 shadow-lg mb-4 md:mb-0 md:mr-6 transition-transform duration-300 hover:scale-105"
         />
         <div className="text-center md:text-left">
-          {/* Ukuran judul utama dibuat responsif */}
+          {/* Ukuran judul utama responsif */}
           <h2 className="text-2xl md:text-3xl font-bold text-pink-800">落乃いなほ (Ochinai Inaho)</h2>
           <p className="text-sm md:text-base text-gray-600">Ambisi: Menikah dengan raja minyak.</p>
           <div className="mt-3 flex flex-wrap gap-2 justify-center md:justify-start">
@@ -32,7 +32,7 @@ function ProfileCard({ isActive, hasBeenViewed }) {
 
       {/* Bagian Lore */}
       <div className="mt-8 border-t border-pink-100 pt-6">
-        {/* Ukuran subjudul dibuat responsif */}
+        {/* Ukuran subjudul responsif */}
         <h3 className="text-lg md:text-xl font-semibold text-pink-700 mb-4">Lore Resmi</h3>
         <div className="space-y-3 text-gray-700">
           <blockquote className="border-l-4 border-pink-200 pl-4 italic text-sm md:text-base">

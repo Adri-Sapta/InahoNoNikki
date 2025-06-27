@@ -20,15 +20,12 @@ const NotifikasiModal = ({ isOpen, onClose, notifikasis }) => {
   if (!isOpen) return null;
 
   return (
-    // PERUBAHAN 1: Menambahkan padding (p-4) pada overlay
-    // Ini memastikan modal tidak akan pernah menyentuh tepi layar HP.
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000] transition-opacity duration-300 p-4"
       onClick={onClose}
     >
       {/* Konten Modal dengan animasi muncul */}
       <div
-        // PERUBAHAN 2: Menyesuaikan padding internal modal
         className="bg-white p-4 md:p-6 rounded-xl shadow-xl w-full max-w-md transition-transform duration-300 transform scale-95 opacity-0 animate-fade-in-scale"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
@@ -36,7 +33,7 @@ const NotifikasiModal = ({ isOpen, onClose, notifikasis }) => {
         aria-labelledby="notifikasi-modal-title"
       >
         <div className="flex justify-between items-center mb-4 pb-4 border-b border-pink-100">
-          {/* PERUBAHAN 3: Menyesuaikan ukuran judul */}
+          {/*Menyesuaikan ukuran judul */}
           <h2 id="notifikasi-modal-title" className="text-xl md:text-2xl font-bold text-pink-800">
             Notifikasi
           </h2>
@@ -56,7 +53,7 @@ const NotifikasiModal = ({ isOpen, onClose, notifikasis }) => {
         ) : (
           <ul className="space-y-3 max-h-80 overflow-y-auto pr-2">
             {notifikasis.map((notifikasi) => (
-              // PERUBAHAN 4: Menyesuaikan padding list item
+              //padding list item
               <li key={notifikasi.id} className="bg-pink-50/50 p-3 rounded-md border border-pink-100 text-gray-700 text-sm hover:bg-pink-100 transition-colors">
                 {notifikasi.message}
                 {notifikasi.timestamp && (

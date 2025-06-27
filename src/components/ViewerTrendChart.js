@@ -40,7 +40,7 @@ function ViewerTrendChart({ isActive, hasBeenViewed, videoData, apiError }) {
   const [categorizedStreams, setCategorizedStreams] = useState({});
   const [activeCategory, setActiveCategory] = useState('Games');
   
-  // 2. useEffect sekarang hanya memproses data dari props
+  // 2. useEffect memproses data dari props
   useEffect(() => {
     if (!videoData || videoData.length === 0) return;
 
@@ -82,7 +82,7 @@ function ViewerTrendChart({ isActive, hasBeenViewed, videoData, apiError }) {
   const chartOptions = {
     indexAxis: 'y', 
     responsive: true,
-    maintainAspectRatio: false, // Penting untuk mengontrol tinggi
+    maintainAspectRatio: false, //mengontrol tinggi
     plugins: { 
       legend: { display: false } 
     },
